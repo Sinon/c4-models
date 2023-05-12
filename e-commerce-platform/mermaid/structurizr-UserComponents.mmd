@@ -1,0 +1,35 @@
+graph TB
+  linkStyle default fill:#ffffff
+
+  subgraph diagram [e-Commerce company - User Service API - Components]
+    style diagram fill:#ffffff,stroke:#ffffff
+
+    3("<div style='font-weight: bold'>Web Application</div><div style='font-size: 70%; margin-top: 0px'>[Container: React, Javascript]</div><div style='font-size: 80%; margin-top:10px'>Allows users to buy from<br />e-commerce site</div>")
+    style 3 fill:#ffffff,stroke:#b2b2b2,color:#000000
+    15("<div style='font-weight: bold'>Scheduled Birthday Fetcher lambda</div><div style='font-size: 70%; margin-top: 0px'>[Container: Lambda, python]</div><div style='font-size: 80%; margin-top:10px'>Scheduled Lambda for<br />calculating users who should<br />receive email</div>")
+    style 15 fill:#ffffff,stroke:#d86613,color:#d86613
+    16("<div style='font-weight: bold'>Email Sender lambda</div><div style='font-size: 70%; margin-top: 0px'>[Container: Lambda, python]</div><div style='font-size: 80%; margin-top:10px'>Lambda for generating and<br />sending email for single user</div>")
+    style 16 fill:#ffffff,stroke:#d86613,color:#d86613
+
+    subgraph 4 [User Service API]
+      style 4 fill:#ffffff,stroke:#b2b2b2,color:#b2b2b2
+
+      5("<div style='font-weight: bold'>Sign In Controller</div><div style='font-size: 70%; margin-top: 0px'>[Component: REST API]</div><div style='font-size: 80%; margin-top:10px'>Allows users to sign in to<br />the e-commerce platform</div>")
+      style 5 fill:#ffffff,stroke:#b2b2b2,color:#000000
+      6("<div style='font-weight: bold'>UserProfile controller</div><div style='font-size: 70%; margin-top: 0px'>[Component: REST API]</div><div style='font-size: 80%; margin-top:10px'>Interface for UserProfile</div>")
+      style 6 fill:#ffffff,stroke:#b2b2b2,color:#000000
+      7("<div style='font-weight: bold'>UserWishlist controller</div><div style='font-size: 70%; margin-top: 0px'>[Component: REST API]</div><div style='font-size: 80%; margin-top:10px'>Interface for UserWishList</div>")
+      style 7 fill:#ffffff,stroke:#b2b2b2,color:#000000
+      8("<div style='font-weight: bold'>UserOffer controller</div><div style='font-size: 70%; margin-top: 0px'>[Component: REST API]</div><div style='font-size: 80%; margin-top:10px'>Interface for UserOffer</div>")
+      style 8 fill:#ffffff,stroke:#b2b2b2,color:#000000
+    end
+
+    15-. "<div>Triggers the birthday email<br />lambda</div><div style='font-size: 70%'></div>" .->16
+    3-. "<div>Makes API call to</div><div style='font-size: 70%'>[JSON/HTTPS]</div>" .->5
+    3-. "<div>Makes API call to</div><div style='font-size: 70%'>[JSON/HTTPS]</div>" .->6
+    3-. "<div>Makes API call to</div><div style='font-size: 70%'>[JSON/HTTPS]</div>" .->8
+    15-. "<div>Makes API call to</div><div style='font-size: 70%'>[JSON/HTTPS]</div>" .->6
+    16-. "<div>Makes API call to</div><div style='font-size: 70%'>[JSON/HTTPS]</div>" .->7
+    16-. "<div>Makes API call to</div><div style='font-size: 70%'>[JSON/HTTPS]</div>" .->8
+    16-. "<div>Makes API call to</div><div style='font-size: 70%'>[JSON/HTTPS]</div>" .->6
+  end

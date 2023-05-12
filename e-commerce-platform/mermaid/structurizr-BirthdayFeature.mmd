@@ -1,0 +1,44 @@
+graph TB
+  linkStyle default fill:#ffffff
+
+  subgraph diagram [e-Commerce company - Dynamic]
+    style diagram fill:#ffffff,stroke:#ffffff
+
+    subgraph 2 [e-Commerce company]
+      style 2 fill:#ffffff,stroke:#b2b2b2,color:#b2b2b2
+
+      subgraph group1 [Recommendation Service]
+        style group1 fill:#ffffff,stroke:#cccccc,color:#cccccc,stroke-dasharray:5
+
+        11("<div style='font-weight: bold'>Recommendation Service API</div><div style='font-size: 70%; margin-top: 0px'>[Container: REST, FastAPI]</div><div style='font-size: 80%; margin-top:10px'>CRUD API for fetching item<br />recommendations</div>")
+        style 11 fill:#ffffff,stroke:#b2b2b2,color:#000000
+      end
+
+      subgraph group2 [User Service]
+        style group2 fill:#ffffff,stroke:#cccccc,color:#cccccc,stroke-dasharray:5
+
+        4("<div style='font-weight: bold'>User Service API</div><div style='font-size: 70%; margin-top: 0px'>[Container: REST, FastAPI]</div><div style='font-size: 80%; margin-top:10px'>CRUD API for interacting with<br />user data</div>")
+        style 4 fill:#ffffff,stroke:#b2b2b2,color:#000000
+      end
+
+      15("<div style='font-weight: bold'>Scheduled Birthday Fetcher lambda</div><div style='font-size: 70%; margin-top: 0px'>[Container: Lambda, python]</div><div style='font-size: 80%; margin-top:10px'>Scheduled Lambda for<br />calculating users who should<br />receive email</div>")
+      style 15 fill:#ffffff,stroke:#d86613,color:#d86613
+      16("<div style='font-weight: bold'>Email Sender lambda</div><div style='font-size: 70%; margin-top: 0px'>[Container: Lambda, python]</div><div style='font-size: 80%; margin-top:10px'>Lambda for generating and<br />sending email for single user</div>")
+      style 16 fill:#ffffff,stroke:#d86613,color:#d86613
+      17("<div style='font-weight: bold'>SES</div><div style='font-size: 70%; margin-top: 0px'>[Container: SES, Email]</div><div style='font-size: 80%; margin-top:10px'>Simple Email Service</div>")
+      style 17 fill:#ffffff,stroke:#3b48cc,color:#3b48cc
+      3("<div style='font-weight: bold'>Web Application</div><div style='font-size: 70%; margin-top: 0px'>[Container: React, Javascript]</div><div style='font-size: 80%; margin-top:10px'>Allows users to buy from<br />e-commerce site</div>")
+      style 3 fill:#ffffff,stroke:#b2b2b2,color:#000000
+    end
+
+    15-. "<div>1. Fetch users whose birthday<br />falls in specified time<br />window -<br />userProfileController</div><div style='font-size: 70%'></div>" .->4
+    15-. "<div>2. Trigger email sending<br />lambda for each user in scope</div><div style='font-size: 70%'></div>" .->16
+    16-. "<div>3. Fetch the users wishlist -<br />wishListController</div><div style='font-size: 70%'></div>" .->4
+    16-. "<div>4. (Optional) Fetch the users<br />item recommendations -<br />userRecommendationController</div><div style='font-size: 70%'></div>" .->11
+    16-. "<div>5. Populate email template<br />and send to SES for delivery</div><div style='font-size: 70%'></div>" .->17
+    16-. "<div>6. Set Birthday email sent<br />timestamp on users profile -<br />userProfileController</div><div style='font-size: 70%'></div>" .->4
+    16-. "<div>7. Store the item offers<br />presented in email -<br />userOfferController</div><div style='font-size: 70%'></div>" .->4
+    3-. "<div>8. User logs into platform<br />during offer period -<br />signinController</div><div style='font-size: 70%'></div>" .->4
+    3-. "<div>9. User profile is fetched<br />which indicates if offer<br />banner should be displayed -<br />userProfileController</div><div style='font-size: 70%'></div>" .->4
+    3-. "<div>10. Fetch the active user<br />offer for display -<br />userOfferController</div><div style='font-size: 70%'></div>" .->4
+  end

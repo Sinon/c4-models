@@ -1,0 +1,77 @@
+graph LR
+  linkStyle default fill:#ffffff
+
+  subgraph diagram [e-Commerce company - Deployment - Live]
+    style diagram fill:#ffffff,stroke:#ffffff
+
+    subgraph 37 [Amazon Web Services]
+      style 37 fill:#ffffff,stroke:#232f3e,color:#232f3e
+
+      subgraph 38 [US-East-1]
+        style 38 fill:#ffffff,stroke:#147eba,color:#147eba
+
+        39("<div style='font-weight: bold'>Route 53</div><div style='font-size: 70%; margin-top: 0px'>[Infrastructure Node]</div><div style='font-size: 80%; margin-top:10px'>Highly available and scalable<br />cloud DNS service.</div>")
+        style 39 fill:#ffffff,stroke:#693cc5,color:#693cc5
+        40("<div style='font-weight: bold'>Elastic Load Balancer</div><div style='font-size: 70%; margin-top: 0px'>[Infrastructure Node]</div><div style='font-size: 80%; margin-top:10px'>Automatically distributes<br />incoming application traffic.</div>")
+        style 40 fill:#ffffff,stroke:#693cc5,color:#693cc5
+        subgraph 41 [Lambdas]
+          style 41 fill:#ffffff,stroke:#888888,color:#000000
+
+          42("<div style='font-weight: bold'>Scheduled Birthday Fetcher lambda</div><div style='font-size: 70%; margin-top: 0px'>[Container: Lambda, python]</div><div style='font-size: 80%; margin-top:10px'>Scheduled Lambda for<br />calculating users who should<br />receive email</div>")
+          style 42 fill:#ffffff,stroke:#d86613,color:#d86613
+          43("<div style='font-weight: bold'>Email Sender lambda</div><div style='font-size: 70%; margin-top: 0px'>[Container: Lambda, python]</div><div style='font-size: 80%; margin-top:10px'>Lambda for generating and<br />sending email for single user</div>")
+          style 43 fill:#ffffff,stroke:#d86613,color:#d86613
+        end
+
+        subgraph 45 [Autoscaling group]
+          style 45 fill:#ffffff,stroke:#cc2264,color:#cc2264
+
+          subgraph 46 [Amazon EC2]
+            style 46 fill:#ffffff,stroke:#d86613,color:#d86613
+
+            47("<div style='font-weight: bold'>Web Application</div><div style='font-size: 70%; margin-top: 0px'>[Container: React, Javascript]</div><div style='font-size: 80%; margin-top:10px'>Allows users to buy from<br />e-commerce site</div>")
+            style 47 fill:#ffffff,stroke:#b2b2b2,color:#000000
+          end
+
+          subgraph 48 [Amazon EKS]
+            style 48 fill:#ffffff,stroke:#d86613,color:#d86613
+
+            49("<div style='font-weight: bold'>Recommendation Service API</div><div style='font-size: 70%; margin-top: 0px'>[Container: REST, FastAPI]</div><div style='font-size: 80%; margin-top:10px'>CRUD API for fetching item<br />recommendations</div>")
+            style 49 fill:#ffffff,stroke:#b2b2b2,color:#000000
+            51("<div style='font-weight: bold'>User Service API</div><div style='font-size: 70%; margin-top: 0px'>[Container: REST, FastAPI]</div><div style='font-size: 80%; margin-top:10px'>CRUD API for interacting with<br />user data</div>")
+            style 51 fill:#ffffff,stroke:#b2b2b2,color:#000000
+            55("<div style='font-weight: bold'>Stock API</div><div style='font-size: 70%; margin-top: 0px'>[Container: REST, FastAPI]</div><div style='font-size: 80%; margin-top:10px'>CRUD API to interact with<br />Item stock levels</div>")
+            style 55 fill:#ffffff,stroke:#b2b2b2,color:#000000
+          end
+
+        end
+
+        subgraph 57 [Amazon RDS]
+          style 57 fill:#ffffff,stroke:#3b48cc,color:#3b48cc
+
+          subgraph 58 [Postgres]
+            style 58 fill:#ffffff,stroke:#888888,color:#000000
+
+            59[("<div style='font-weight: bold'>User Database</div><div style='font-size: 70%; margin-top: 0px'>[Container: Postgres, SQL]</div><div style='font-size: 80%; margin-top:10px'>Stores information regards<br />the user</div>")]
+            style 59 fill:#ffffff,stroke:#b2b2b2,color:#000000
+            61[("<div style='font-weight: bold'>Stock Database</div><div style='font-size: 70%; margin-top: 0px'>[Container: Postgres, SQL]</div><div style='font-size: 80%; margin-top:10px'>Stock DB</div>")]
+            style 61 fill:#ffffff,stroke:#b2b2b2,color:#000000
+          end
+
+        end
+
+      end
+
+    end
+
+    42-. "<div>Triggers the birthday email<br />lambda</div><div style='font-size: 70%'></div>" .->43
+    43-. "<div>Fetches the recommended items<br />for a user</div><div style='font-size: 70%'></div>" .->49
+    47-. "<div>Login a given user and<br />provider User Profile data</div><div style='font-size: 70%'></div>" .->51
+    42-. "<div>Fetches the users in birthday<br />scope</div><div style='font-size: 70%'></div>" .->51
+    43-. "<div>Fetches the user profile &<br />wishlist of the user.</div><div style='font-size: 70%'></div>" .->51
+    43-. "<div>Fetches the stock levels</div><div style='font-size: 70%'></div>" .->55
+    51-. "<div>Reads from and writes to</div><div style='font-size: 70%'></div>" .->59
+    55-. "<div>Reads from and writes to</div><div style='font-size: 70%'></div>" .->61
+    39-. "<div>Forwards requests to</div><div style='font-size: 70%'>[HTTPS]</div>" .->40
+    40-. "<div>Forwards requests to</div><div style='font-size: 70%'>[HTTPS]</div>" .->47
+  end
